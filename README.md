@@ -1,4 +1,7 @@
-# AI NFT Generator
+# AI NFT Minter
+
+This is an DApp where you can mint NFTs using AI. Using Hugging Face, a text is converted to an image and then minted as an NFT and uploaded to IPFS.
+I followed this [Tutorial](https://www.youtube.com/watch?v=myascjqPnFc&list=PLbYKSVntn8fgfbv7ESi8tS7bHu-p3-AsN&index=22) for creating this project.
 
 ## Technology Stack & Tools
 
@@ -10,34 +13,28 @@
 - [NFT.Storage](https://nft.storage/) (Connection to IPFS)
 - [Hugging Face](https://huggingface.co/) (AI Models)
 
-## Requirements For Initial Setup
-- Install [NodeJS](https://nodejs.org/en/)
-
 ## Setting Up
-### 1. Clone/Download the Repository
+- 1. Clone/Download the Repository
 
-### 2. Install Dependencies:
+- 2. Install Dependencies:
 `$ npm install`
 
-### 3. Setup .env file:
-Before running any scripts, you'll want to create a .env file with the following values (see .env.example):
+- 3. Setup .env file:
+Before running any scripts, you'll want to create a .env file with the values as seen in .env.example:
 
-- **REACT_APP_HUGGING_FACE_API_KEY=""**
-- **REACT_APP_NFT_STORAGE_API_KEY=""**
+Create an account on [Hugging Face](https://huggingface.co/), visit your profile settings, and create a read access token. 
 
-You'll need to create an account on [Hugging Face](https://huggingface.co/), visit your profile settings, and create a read access token. 
+Create an account on [NFT.Storage](https://nft.storage/), and create a new API key.
 
-You'll also need to create an account on [NFT.Storage](https://nft.storage/), and create a new API key.
-
-### 4. Run tests
+- 4. Run tests
 `$ npx hardhat test`
 
-### 5. Start Hardhat node
+- 5. Start Hardhat node
 `$ npx hardhat node`
 
-### 6. Run deployment script
+- 6. Run deployment script
 In a separate terminal execute:
 `$ npx hardhat run ./scripts/deploy.js --network localhost`
 
-### 7. Start frontend
+- 7. Start frontend
 `$ npm run start`
