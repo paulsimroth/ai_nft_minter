@@ -14,7 +14,7 @@ I followed this [Tutorial](https://www.youtube.com/watch?v=myascjqPnFc&list=PLbY
 - [Hugging Face](https://huggingface.co/) (AI Models)
 
 ## Setting Up
-- 1. Clone/Download the Repository
+- 1. Clone the Repository
 
 - 2. Install Dependencies:
 `$ npm install`
