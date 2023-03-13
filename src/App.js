@@ -17,6 +17,7 @@ import config from './config.json';
 function App() {
   const [provider, setProvider] = useState(null);
   const [account, setAccount] = useState(null);
+  const [instance, setInstance] = useState(null);
 
   const [name, setName] = useState(null);
   const [description, setDescription] = useState(null);
@@ -27,6 +28,11 @@ function App() {
   const loadBlockchainData = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     setProvider(provider);
+
+    const network = await provider.getNetwork();
+
+    const instance = new ethers.Contract(config[network.chainId].nft.address, NFT, provider);
+    setInstance(instance);
   };
 
   const submitHandler = async (e) => {
@@ -38,7 +44,8 @@ function App() {
     //Uploading Image to IPFS using NFT.Storage
     const url = await uploadImage(imageData);
 
-    console.log("URL", url);
+    //Mint NFT
+    await mintImage(url);
   };
 
   const createImage = async () => {
@@ -93,6 +100,14 @@ function App() {
     setURL(url);
 
     return url;
+  };
+
+  const mintImage = async (tokenURI) => {
+    console.log("Waiting for mint...");
+
+    const signer = await provider.getSigner();
+    const tx = await instance.connect(signer).mint(tokenURI, { value: ethers.utils.parseUnits("1", "ether") });
+    await tx.wait();
   };
 
   useEffect(() => {
