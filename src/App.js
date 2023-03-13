@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { NFTStorage, File } from 'nft.storage'
+import { NFTStorage, File } from 'nft.storage';
 import { Buffer } from 'buffer';
 import { ethers } from 'ethers';
 import axios from 'axios';
@@ -21,6 +21,7 @@ function App() {
   const [name, setName] = useState(null);
   const [description, setDescription] = useState(null);
   const [image, setImage] = useState(null);
+  const [url, setURL] = useState(null);
 
   //Connecting tp Blockchain and fetching data
   const loadBlockchainData = async () => {
@@ -33,12 +34,15 @@ function App() {
     
     //Calling API to generate Image based on description
     const imageData = createImage();
+
+    //Uploading Image to IPFS using NFT.Storage
+    const url = await uploadImage(imageData);
+
+    console.log("URL", url);
   };
 
   const createImage = async () => {
     console.log("Creating Image");
-
-    console.log("API KEY", process.env.HUGGING_FACE_API_KEY);
 
     // URL of AI model
     const URL = `https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2`
@@ -48,7 +52,7 @@ function App() {
       method: 'POST',
       url: URL,
       headers: {
-        Authorization: `Bearer ${process.env.HUGGING_FACE_API_KEY}`,
+        Authorization: `Bearer ${ process.env.HUGGING_FACE_API_KEY }`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
@@ -69,6 +73,26 @@ function App() {
     setImage(img);
 
     return data;
+  };
+
+  const uploadImage = async (imageData) => {
+    console.log("Uploading Image...");
+
+    //Creating Instance of NFT.Storage
+    const nftStorage = new NFTStorage({ token: process.env.NFT_STORAGE_API_KEY });
+
+    //Sending request to store image
+    const { ipnft } = await nftStorage.store({
+      image: new File([imageData], "image.jpeg", { type: "image/jpeg" }),
+      name: name,
+      description: description,
+    });
+
+    //Save URL
+    const url = `https://ipfs.io/ipfs/${ipnft}/metadata.json`;
+    setURL(url);
+
+    return url;
   };
 
   useEffect(() => {
@@ -92,7 +116,7 @@ function App() {
         </div>
 
       </div>
-      <p>View&nbsp;<a href="/">Metadata</a></p>
+      <p>View&nbsp;<a href={url}>Metadata</a></p>
     </div>
   );
 };
